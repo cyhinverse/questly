@@ -1,0 +1,4 @@
+/* Hide navbar in admin pages */
+.navbar-adaptive {
+  display: none !important;
+}

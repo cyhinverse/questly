@@ -1,0 +1,108 @@
+description: "Project Rules for MVP Quiz & Room App"
+globs:
+alwaysApply: true
+
+---
+
+1. Tech Stack
+
+   - Next.js 14 (App Router)
+   - Supabase (Auth, DB, Realtime)
+   - TailwindCSS
+   - TypeScript only
+
+2. Folder Structure
+   /app
+   layout.tsx
+   page.tsx # Landing page
+   /auth
+   login/page.tsx
+   register/page.tsx
+   /profile
+   page.tsx # View/Edit profile
+   /quiz
+   page.tsx # Quiz list
+   create/page.tsx # Create quiz
+   [id]/page.tsx # Play quiz
+   /room
+   lobby/page.tsx # Join room / player list
+   [id]/page.tsx # Realtime game
+   leaderboard/page.tsx # End of game results
+
+   /components
+   Button.tsx
+   Input.tsx
+   Modal.tsx
+   QuestionCard.tsx
+   QuizCard.tsx
+   Leaderboard.tsx
+   PlayerList.tsx
+
+   /lib
+   supabaseClient.ts
+   auth.ts
+   utils.ts
+
+   /hooks
+   useAuth.ts
+   useQuiz.ts
+   useRealtime.ts
+
+   /types
+   quiz.ts
+   user.ts
+   room.ts
+
+   /styles
+   globals.css
+
+3. Code Style
+
+   - camelCase for variables/functions
+   - PascalCase for React components
+   - Always use TypeScript types
+   - Inline comments for complex logic
+   - Split files > 300 lines
+   - Avoid duplication; refactor when needed
+
+4. Database & Auth
+
+   - Supabase schema: quiz, question, room, player, answer
+   - Always enforce Supabase RLS
+   - Default login via Supabase Auth
+   - Support Google OAuth for quick login
+
+5. UI/UX Rules
+
+   - Color palette: violet-400, purple-400, white
+   - TailwindCSS for all styling
+   - Responsive design for all devices (mobile-first, tablet, desktop)
+   - Consistent border radius: `rounded-2xl`
+   - Use Framer Motion for smooth animations
+   - Accessibility best practices (labels, aria attributes)
+
+6. Testing
+
+   - Jest + React Testing Library for unit tests
+   - Playwright for end-to-end tests
+   - All UI components: ≥1 unit test
+   - Critical flows (login, create quiz, join room, submit answer) must have e2e tests
+   - Use `data-testid` for stable selectors
+   - Keep tests colocated with components
+   - Tests in TypeScript
+   - Avoid snapshot testing unless necessary
+
+7. Best Practices
+
+   - Reusable UI components (avoid Tailwind duplication)
+   - Validate inputs in API routes
+   - Hooks must be small, focused, reusable
+   - State management via React hooks only
+
+8. Supabase Integration
+   - Always use `/lib/supabaseClient.ts` instance
+   - No new Supabase client in components/hooks
+   - All DB queries, auth calls, realtime subscriptions use shared client
+   - Required env vars: `NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+   - Use async/await for all Supabase calls
+   - Explicit error handling (check Supabase response)
