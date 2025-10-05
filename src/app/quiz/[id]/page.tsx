@@ -13,7 +13,7 @@ export default function PlayQuiz() {
   const params = useParams();
   const router = useRouter();
   const searchParams = useSearchParams();
-  const { getQuiz, fetchQuestions, questions, loading } = useQuiz();
+  const { getQuiz, fetchQuestions, questions } = useQuiz();
   const { user } = useAuth();
   const { markPlayerCompleted } = useRoom();
 
@@ -23,6 +23,7 @@ export default function PlayQuiz() {
     description?: string;
     difficulty: string;
   } | null>(null);
+  const [isInitialLoading, setIsInitialLoading] = useState(true);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [timeLeft, setTimeLeft] = useState(30);
@@ -39,10 +40,15 @@ export default function PlayQuiz() {
   const quizId = params.id as string;
 
   const loadQuiz = useCallback(async () => {
-    const { data: quizData } = await getQuiz(quizId);
-    if (quizData) {
-      setQuiz(quizData);
-      await fetchQuestions(quizId);
+    try {
+      setIsInitialLoading(true);
+      const { data: quizData } = await getQuiz(quizId);
+      if (quizData) {
+        setQuiz(quizData);
+        await fetchQuestions(quizId);
+      }
+    } finally {
+      setIsInitialLoading(false);
     }
   }, [quizId, getQuiz, fetchQuestions]);
 
@@ -135,7 +141,7 @@ export default function PlayQuiz() {
     }
   };
 
-  if (loading) {
+  if (isInitialLoading) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center">
@@ -145,7 +151,7 @@ export default function PlayQuiz() {
     );
   }
 
-  if (!loading && (!quiz || questions.length === 0)) {
+  if (!isInitialLoading && (!quiz || questions.length === 0)) {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center">
