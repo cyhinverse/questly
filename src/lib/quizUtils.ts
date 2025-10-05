@@ -26,7 +26,7 @@ export async function clearDuplicateQuizPlays(userId: string) {
     // Find duplicates and keep only the first one
     const duplicatesToDelete: string[] = [];
     
-    Object.values(groupedPlays).forEach(group => {
+    (Object.values(groupedPlays) as typeof allPlays[]).forEach((group: typeof allPlays) => {
       if (group.length > 1) {
         // Keep the first one (most recent), delete the rest
         const toKeep = group[0];

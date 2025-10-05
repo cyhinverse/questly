@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -17,7 +17,7 @@ import { useToast } from "@/hooks/useToast";
 
 // Removed broken image URL
 
-export default function JoinRoom() {
+function JoinRoomContent() {
   const searchParams = useSearchParams();
   const [hostNickname, setHostNickname] = useState("");
   const [selectedQuizId, setSelectedQuizId] = useState("");
@@ -294,5 +294,13 @@ export default function JoinRoom() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function JoinRoom() {
+  return (
+    <Suspense fallback={<LoadingSpinner size="lg" text="Loading..." />}>
+      <JoinRoomContent />
+    </Suspense>
   );
 }

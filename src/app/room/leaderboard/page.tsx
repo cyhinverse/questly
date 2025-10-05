@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from 'react';
+import { useState, useEffect, useCallback, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useRoom } from '@/hooks/useRoom';
 import { useQuiz } from '@/hooks/useQuiz';
@@ -9,7 +9,7 @@ import { Button } from '@/components/Button';
 import { LoadingSpinner } from '@/components/ui/loading-spinner';
 import { supabase } from '@/lib/supabaseClient';
 
-export default function Leaderboard() {
+function LeaderboardContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const roomId = searchParams.get('room');
@@ -295,7 +295,7 @@ export default function Leaderboard() {
                           {player.score}
                         </div>
                         <div className="text-sm text-gray-500">
-                          {quiz?.question?.length > 0 
+                          {quiz?.question && quiz.question.length > 0 
                             ? Math.round((player.score / (quiz.question.length * 100)) * 100)
                             : 0}%
                         </div>
@@ -373,5 +373,13 @@ export default function Leaderboard() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function Leaderboard() {
+  return (
+    <Suspense fallback={<LoadingSpinner size="lg" text="Loading..." />}>
+      <LeaderboardContent />
+    </Suspense>
   );
 }

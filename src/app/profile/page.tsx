@@ -36,7 +36,6 @@ export default function Profile() {
     resolver: zodResolver(profileSchema),
     defaultValues: {
       displayName: "",
-      bio: "",
     },
   });
 
@@ -74,7 +73,6 @@ export default function Profile() {
       
       reset({
         displayName,
-        bio: '', // Remove bio since it's not in Supabase Auth
       });
       setAvatarPreview(avatarUrl);
     }
@@ -84,7 +82,6 @@ export default function Profile() {
     if (isEditing) {
       // Cancel editing - reset form
       loadUserData();
-      setAvatarFile(null);
     }
     setIsEditing(!isEditing);
   };
@@ -120,7 +117,6 @@ export default function Profile() {
   const handleAvatarChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      setAvatarFile(file);
       const reader = new FileReader();
       reader.onload = (e) => {
         setAvatarPreview(e.target?.result as string);

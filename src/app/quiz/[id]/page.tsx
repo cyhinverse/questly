@@ -31,28 +31,6 @@ export default function PlayQuiz() {
 
   const quizId = params.id as string;
 
-  useEffect(() => {
-    if (quizId) {
-      loadQuiz();
-    }
-  }, [quizId, loadQuiz]);
-
-  useEffect(() => {
-    if (questions.length > 0) {
-      setTimeLeft(30); // Reset timer for each question
-    }
-  }, [currentQuestionIndex, questions]);
-
-  useEffect(() => {
-    if (timeLeft > 0 && !quizCompleted) {
-      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
-      return () => clearTimeout(timer);
-    } else if (timeLeft === 0 && !quizCompleted) {
-      // Time's up, move to next question
-      handleNextQuestion().catch(() => {});
-    }
-  }, [timeLeft, quizCompleted, handleNextQuestion]);
-
   const loadQuiz = useCallback(async () => {
     const { data: quizData } = await getQuiz(quizId);
     if (quizData) {
@@ -60,28 +38,6 @@ export default function PlayQuiz() {
       await fetchQuestions(quizId);
     }
   }, [quizId, getQuiz, fetchQuestions]);
-
-  const handleAnswer = (answerIndex: number) => {
-    if (selectedAnswer !== null || quizCompleted) return;
-    
-    setSelectedAnswer(answerIndex);
-    
-    const currentQuestion = questions[currentQuestionIndex];
-    const isCorrect = answerIndex === currentQuestion.correct_answer;
-    
-    // Save answer
-    const newAnswer = {
-      questionId: currentQuestion.id,
-      answer: answerIndex,
-      isCorrect
-    };
-    setAnswers([...answers, newAnswer]);
-    
-    // Update score
-    if (isCorrect) {
-      setScore(score + 100);
-    }
-  };
 
   const handleNextQuestion = useCallback(async () => {
     if (currentQuestionIndex < questions.length - 1) {
@@ -112,6 +68,50 @@ export default function PlayQuiz() {
       }, 2000);
     }
   }, [currentQuestionIndex, questions.length, isRoomGame, roomId, user, markPlayerCompleted, score, router, quizId, answers]);
+
+  useEffect(() => {
+    if (quizId) {
+      loadQuiz();
+    }
+  }, [quizId, loadQuiz]);
+
+  useEffect(() => {
+    if (questions.length > 0) {
+      setTimeLeft(30); // Reset timer for each question
+    }
+  }, [currentQuestionIndex, questions]);
+
+  useEffect(() => {
+    if (timeLeft > 0 && !quizCompleted) {
+      const timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+      return () => clearTimeout(timer);
+    } else if (timeLeft === 0 && !quizCompleted) {
+      // Time's up, move to next question
+      handleNextQuestion().catch(() => {});
+    }
+  }, [timeLeft, quizCompleted, handleNextQuestion]);
+
+  const handleAnswer = (answerIndex: number) => {
+    if (selectedAnswer !== null || quizCompleted) return;
+    
+    setSelectedAnswer(answerIndex);
+    
+    const currentQuestion = questions[currentQuestionIndex];
+    const isCorrect = answerIndex === currentQuestion.correct_answer;
+    
+    // Save answer
+    const newAnswer = {
+      questionId: currentQuestion.id,
+      answer: answerIndex,
+      isCorrect
+    };
+    setAnswers([...answers, newAnswer]);
+    
+    // Update score
+    if (isCorrect) {
+      setScore(score + 100);
+    }
+  };
 
   if (loading) {
     return (
@@ -161,8 +161,8 @@ export default function PlayQuiz() {
         <div className="bg-white rounded-2xl shadow-2xl p-6 mb-6">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-2xl font-bold text-black">{quiz.title}</h1>
-              <p className="text-gray-700">{quiz.description || "Test your knowledge"}</p>
+              <h1 className="text-2xl font-bold text-black">{quiz?.title || "Loading..."}</h1>
+              <p className="text-gray-700">{quiz?.description || "Test your knowledge"}</p>
             </div>
             <div className="text-right">
               <div className="text-sm text-gray-500">
