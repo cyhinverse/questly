@@ -55,7 +55,7 @@ export default function CreateQuiz() {
     },
   });
 
-  const { fields, append, remove } = useFieldArray({
+  const { fields, append, remove, replace } = useFieldArray({
     control,
     name: "questions",
   });
@@ -93,12 +93,13 @@ export default function CreateQuiz() {
       );
 
       if (Array.isArray(aiQuestions) && aiQuestions.length > 0) {
-        // Clear existing questions first
-        while (fields.length > 0) {
-          remove(0);
+        // Clear all existing questions first by removing them
+        const currentLength = fields.length;
+        for (let i = currentLength - 1; i >= 0; i--) {
+          remove(i);
         }
 
-        // Append AI generated questions one by one
+        // Then append all AI questions
         aiQuestions.forEach((question) => {
           append(question);
         });
