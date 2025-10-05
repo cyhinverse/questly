@@ -13,7 +13,7 @@ type QuizCardProps = {
   onPlaySolo?: () => void;
 };
 
-export function QuizCard({
+export const QuizCard = React.memo(function QuizCard({
   title,
   difficulty,
   difficultyColor,
@@ -30,21 +30,23 @@ export function QuizCard({
         <h2 className="text-lg font-semibold text-black line-clamp-2 flex-1 mr-3 leading-tight">
           {title}
         </h2>
-        <span className={`text-xs text-white px-2 py-1 rounded-full font-medium ${difficultyColor} flex-shrink-0 h-fit`}>
+        <span
+          className={`text-xs text-white px-2 py-1 rounded-full font-medium ${difficultyColor} flex-shrink-0 h-fit`}
+        >
           {difficulty}
         </span>
       </div>
-      
+
       {/* Info section with fixed height */}
       <div className="flex justify-between items-center text-gray-700 text-sm mb-6 min-h-5">
         <div className="flex-1 text-center truncate">{questions} questions</div>
         <div className="flex-1 text-center truncate">By {author}</div>
         <div className="flex-1 text-center truncate">{plays} plays</div>
       </div>
-      
+
       {/* Spacer to push buttons to bottom */}
       <div className="flex-1"></div>
-      
+
       {/* Buttons section - always at bottom */}
       <div className="flex gap-2 mt-auto">
         <button
@@ -53,7 +55,7 @@ export function QuizCard({
         >
           Play Solo
         </button>
-        
+
         {onPlaySolo && (
           <button
             className="flex-1 bg-white border border-gray-300 hover:bg-gray-100 text-black text-sm font-medium py-2 px-3 rounded-md transition-colors cursor-pointer"
@@ -65,4 +67,4 @@ export function QuizCard({
       </div>
     </div>
   );
-}
+});
