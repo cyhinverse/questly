@@ -72,7 +72,7 @@ export function useUserStats(userId: string | null) {
       }
 
       // Fetch room creation stats
-      let roomsCreated: any[] = [];
+      let roomsCreated: Array<{ id: string }> = [];
       try {
         const { data: roomsCreatedData, error: roomError } = await supabase
           .from('room')
@@ -89,7 +89,7 @@ export function useUserStats(userId: string | null) {
       }
 
       // Fetch room participation stats
-      let roomsJoined: any[] = [];
+      let roomsJoined: Array<{ room_id: string }> = [];
       try {
         const { data: roomsJoinedData, error: joinError } = await supabase
           .from('player')
@@ -131,7 +131,7 @@ export function useUserStats(userId: string | null) {
           acc.push({ ...play, key });
         }
         return acc;
-      }, [] as any[]);
+      }, [] as Array<{ quiz_id: string; score: number; correct_answers: number; total_questions: number; played_at: string; key: string }>);
 
       const recentPlays = uniquePlays.slice(0, 5).map(play => ({
         quiz_id: play.quiz_id,

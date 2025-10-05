@@ -4,13 +4,11 @@ import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
+import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { useAuth } from "@/hooks/useAuth";
 import { useUserStats } from "@/hooks/useUserStats";
@@ -20,7 +18,6 @@ import { profileSchema, type ProfileFormData } from "@/lib/schemas";
 
 export default function Profile() {
   const [isEditing, setIsEditing] = useState(false);
-  const [avatarFile, setAvatarFile] = useState<File | null>(null);
   const [avatarPreview, setAvatarPreview] = useState<string | null>(null);
   const [isAdmin, setIsAdmin] = useState(false);
   
@@ -64,7 +61,7 @@ export default function Profile() {
         .single();
       
       setIsAdmin(data?.role === 'admin');
-    } catch (error) {
+    } catch {
       setIsAdmin(false);
     }
   };
@@ -111,7 +108,7 @@ export default function Profile() {
         description: "Profile updated successfully!",
       });
       setIsEditing(false);
-    } catch (error) {
+    } catch {
       toast({
         title: "Error",
         description: "Failed to update profile",
@@ -194,10 +191,11 @@ export default function Profile() {
                   <div className="relative w-20 h-20 mx-auto mb-4">
                     <div className="w-full h-full rounded-full overflow-hidden bg-gray-100">
                       {avatarPreview ? (
-                        <img 
+                        <Image 
                           src={avatarPreview} 
                           alt="Avatar" 
-                          className="w-full h-full object-cover"
+                          fill
+                          className="object-cover"
                         />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-xl text-gray-600 font-semibold">

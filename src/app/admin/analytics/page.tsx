@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
 import { supabase } from "@/lib/supabaseClient";
 import {
@@ -46,7 +45,6 @@ interface AnalyticsData {
   };
 }
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042'];
 
 export default function AdminAnalytics() {
   const [data, setData] = useState<AnalyticsData | null>(null);

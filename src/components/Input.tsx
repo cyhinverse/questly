@@ -7,6 +7,7 @@ import { Label } from "@/components/ui/label"
 export interface InputProps
   extends React.InputHTMLAttributes<HTMLInputElement> {
   // Extends all input attributes
+  className?: string;
 }
 
 const Input = React.forwardRef<HTMLInputElement, InputProps>(
@@ -29,6 +30,7 @@ Input.displayName = "Input"
 export interface TextareaProps
   extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   // Extends all textarea attributes
+  className?: string;
 }
 
 const Textarea = React.forwardRef<HTMLTextAreaElement, TextareaProps>(
@@ -50,6 +52,7 @@ Textarea.displayName = "Textarea"
 export interface SelectProps
   extends React.SelectHTMLAttributes<HTMLSelectElement> {
   // Extends all select attributes
+  className?: string;
 }
 
 const Select = React.forwardRef<HTMLSelectElement, SelectProps>(

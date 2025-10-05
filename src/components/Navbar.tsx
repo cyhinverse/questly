@@ -8,7 +8,7 @@ import { supabase } from "@/lib/supabaseClient";
 
 export function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [user, setUser] = useState<any>(null);
+  const [user, setUser] = useState<{ id: string; email?: string } | null>(null);
   const [isMounted, setIsMounted] = useState(false);
   const pathname = usePathname(); // luôn gọi hook trước!
 

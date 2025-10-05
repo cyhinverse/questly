@@ -33,7 +33,7 @@ export default function RoomGame() {
   const { user } = useAuth();
   const { success, error: showError } = useToastHelpers();
   
-  const [quiz, setQuiz] = useState<any>(null);
+  const [quiz, setQuiz] = useState<{ id: string; title: string; description?: string; difficulty: string } | null>(null);
   const [isHost, setIsHost] = useState(false);
   const [playerId, setPlayerId] = useState<string | null>(null);
   const [realtimeStatus, setRealtimeStatus] = useState<'connecting' | 'connected' | 'disconnected'>('connecting');

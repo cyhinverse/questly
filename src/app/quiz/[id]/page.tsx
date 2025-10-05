@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { QuestionCard } from "@/components/QuestionCard";
 import { Button } from "@/components/Button";
@@ -17,7 +17,7 @@ export default function PlayQuiz() {
   const { user } = useAuth();
   const { markPlayerCompleted } = useRoom();
   
-  const [quiz, setQuiz] = useState<any>(null);
+  const [quiz, setQuiz] = useState<{ id: string; title: string; description?: string; difficulty: string } | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [timeLeft, setTimeLeft] = useState(30);
@@ -35,7 +35,7 @@ export default function PlayQuiz() {
     if (quizId) {
       loadQuiz();
     }
-  }, [quizId]);
+  }, [quizId, loadQuiz]);
 
   useEffect(() => {
     if (questions.length > 0) {
@@ -51,16 +51,15 @@ export default function PlayQuiz() {
       // Time's up, move to next question
       handleNextQuestion().catch(() => {});
     }
-  }, [timeLeft, quizCompleted]);
+  }, [timeLeft, quizCompleted, handleNextQuestion]);
 
-  const loadQuiz = async () => {
-    const { data: quizData, error } = await getQuiz(quizId);
+  const loadQuiz = useCallback(async () => {
+    const { data: quizData } = await getQuiz(quizId);
     if (quizData) {
       setQuiz(quizData);
       await fetchQuestions(quizId);
-    } else {
     }
-  };
+  }, [quizId, getQuiz, fetchQuestions]);
 
   const handleAnswer = (answerIndex: number) => {
     if (selectedAnswer !== null || quizCompleted) return;
@@ -84,7 +83,7 @@ export default function PlayQuiz() {
     }
   };
 
-  const handleNextQuestion = async () => {
+  const handleNextQuestion = useCallback(async () => {
     if (currentQuestionIndex < questions.length - 1) {
       setCurrentQuestionIndex(currentQuestionIndex + 1);
       setSelectedAnswer(null);
@@ -96,7 +95,8 @@ export default function PlayQuiz() {
       if (isRoomGame && roomId && user) {
         try {
           await markPlayerCompleted(roomId, user.id, score);
-        } catch (error) {
+        } catch {
+          // Handle error silently
         }
       }
       
@@ -111,7 +111,7 @@ export default function PlayQuiz() {
         }
       }, 2000);
     }
-  };
+  }, [currentQuestionIndex, questions.length, isRoomGame, roomId, user, markPlayerCompleted, score, router, quizId, answers]);
 
   if (loading) {
     return (

@@ -22,7 +22,6 @@ export default function SignUp() {
     register,
     handleSubmit,
     formState: { errors },
-    watch,
     clearErrors,
   } = useForm<RegisterFormData>({
     resolver: zodResolver(registerSchema),
@@ -50,7 +49,7 @@ export default function SignUp() {
           variant: "destructive",
         });
       }
-    } catch (err) {
+    } catch {
       toast({
         title: "Error",
         description: "An unexpected error occurred",
@@ -71,7 +70,7 @@ export default function SignUp() {
         title: "Success",
         description: "Signed in with Google successfully!",
       });
-    } catch (err) {
+    } catch {
       toast({
         title: "Error",
         description: "Failed to sign in with Google",

@@ -45,7 +45,7 @@ export function useQuiz() {
       }
       
       // Sort by created_at descending (newest first)
-      const sortedData = (data || []).sort((a: any, b: any) => 
+      const sortedData = (data || []).sort((a: { created_at: string }, b: { created_at: string }) => 
         new Date(b.created_at).getTime() - new Date(a.created_at).getTime()
       );
       

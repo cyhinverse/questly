@@ -48,7 +48,7 @@ export default function Login() {
           variant: "destructive",
         });
       }
-    } catch (err) {
+    } catch {
       toast({
         title: "Error",
         description: "An unexpected error occurred",
@@ -69,7 +69,7 @@ export default function Login() {
         title: "Success",
         description: "Signed in with Google successfully!",
       });
-    } catch (err) {
+    } catch {
       toast({
         title: "Error",
         description: "Failed to sign in with Google",

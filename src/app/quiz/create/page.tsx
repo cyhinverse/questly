@@ -76,8 +76,6 @@ export default function CreateQuiz() {
         }
 
         // Cập nhật progress cho việc tạo câu hỏi theo batch
-        const totalBatches = Math.ceil(aiQuestionCount / 10);
-        const currentBatch = 0;
         
         const aiQuestions = await generateQuestionsWithMistral(aiTopic, aiQuestionCount, randomDifficulty);
         
@@ -260,7 +258,6 @@ Tạo ${batchSize} câu hỏi ${difficulty} về ${topic}`
       });
 
       if (!response.ok) {
-        const errorText = await response.text();
         
         // Xử lý lỗi 429 (Too Many Requests) cụ thể
         if (response.status === 429) {
@@ -286,7 +283,7 @@ Tạo ${batchSize} câu hỏi ${difficulty} về ${topic}`
       let questions;
       try {
         questions = JSON.parse(generatedContent);
-      } catch (parseError) {
+      } catch {
         
         // Clean và parse lại
         let cleaned = generatedContent.trim()
@@ -304,7 +301,7 @@ Tạo ${batchSize} câu hỏi ${difficulty} về ${topic}`
         
         try {
           questions = JSON.parse(cleaned);
-        } catch (secondError) {
+        } catch {
           throw new Error('Không thể phân tích phản hồi JSON');
         }
       }
@@ -315,7 +312,7 @@ Tạo ${batchSize} câu hỏi ${difficulty} về ${topic}`
       }
 
       // Ensure each question has required fields
-      const validatedQuestions = questions.map((q: any, index: number) => ({
+      const validatedQuestions = questions.map((q: { content?: string; options?: string[]; correct_answer?: number }, index: number) => ({
         content: q.content || `Question ${index + 1}`,
         options: Array.isArray(q.options) && q.options.length === 4 
           ? q.options 

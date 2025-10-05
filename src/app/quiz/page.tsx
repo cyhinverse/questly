@@ -26,7 +26,7 @@ export default function QuizList() {
 
   useEffect(() => {
     fetchQuizzes();
-  }, []);
+  }, [fetchQuizzes]);
 
 
   const getDifficultyColor = (difficulty?: string) => {

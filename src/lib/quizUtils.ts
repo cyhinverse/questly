@@ -21,7 +21,7 @@ export async function clearDuplicateQuizPlays(userId: string) {
       }
       acc[key].push(play);
       return acc;
-    }, {} as Record<string, any[]>);
+    }, {} as Record<string, typeof allPlays>);
 
     // Find duplicates and keep only the first one
     const duplicatesToDelete: string[] = [];
@@ -77,7 +77,7 @@ export async function getUniqueQuizPlays(userId: string, limit: number = 5) {
         acc.push(play);
       }
       return acc;
-    }, [] as any[]) || [];
+    }, [] as typeof plays) || [];
 
     return uniquePlays.slice(0, limit);
   } catch (error) {

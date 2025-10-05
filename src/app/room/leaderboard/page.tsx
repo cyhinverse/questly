@@ -25,8 +25,8 @@ export default function Leaderboard() {
   const { getQuiz, fetchQuestions } = useQuiz();
   const { user } = useAuth();
   
-  const [quiz, setQuiz] = useState<any>(null);
-  const [sortedPlayers, setSortedPlayers] = useState<any[]>([]);
+  const [quiz, setQuiz] = useState<{ id: string; title: string; question?: Array<{ id: string; content: string; options: string[]; correct_answer: number }> } | null>(null);
+  const [sortedPlayers, setSortedPlayers] = useState<Array<{ id: string; user_id: string; nickname: string; score: number; quiz_completed: boolean; completed_at?: string }>>([]);
   const [realtimeStatus, setRealtimeStatus] = useState<'connecting' | 'connected' | 'disconnected'>('connecting');
   const [lastUpdate, setLastUpdate] = useState<Date | null>(null);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -43,7 +43,7 @@ export default function Leaderboard() {
         const { data: quizData } = await getQuiz(roomData.quiz_id);
         if (quizData) {
           // Nếu không có questions trong quiz data, fetch riêng
-          const quizWithQuestions = quizData as any;
+          const quizWithQuestions = quizData as { id: string; title: string; question?: Array<{ id: string; content: string; options: string[]; correct_answer: number }> };
           if (!quizWithQuestions.question || quizWithQuestions.question.length === 0) {
             const { data: questionsData } = await fetchQuestions(roomData.quiz_id);
             if (questionsData) {

@@ -1,3 +1,4 @@
+import Image from "next/image";
 import { Button } from "@/components/ui/button";
 
 interface GoogleSignInButtonProps {
@@ -21,9 +22,11 @@ export function GoogleSignInButton({
       disabled={disabled || isLoading} 
       className="w-full"
     >
-      <img 
+      <Image 
         src="https://www.svgrepo.com/show/475656/google-color.svg" 
         alt="Google" 
+        width={20}
+        height={20}
         className="w-5 h-5" 
       />
       <span className="font-medium text-black">

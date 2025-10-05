@@ -9,9 +9,7 @@ import {
   Users, 
   FileText, 
   Play, 
-  TrendingUp,
-  Calendar,
-  Clock
+  TrendingUp
 } from "lucide-react";
 
 interface DashboardStats {
