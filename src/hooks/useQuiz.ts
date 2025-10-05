@@ -65,7 +65,7 @@ export function useQuiz() {
   }, []);
 
   // Lấy danh sách câu hỏi của một quiz theo thứ tự tạo
-  const fetchQuestions = async (quizId: string) => {
+  const fetchQuestions = useCallback(async (quizId: string) => {
     setLoading(true);
     setError(null);
     try {
@@ -86,7 +86,7 @@ export function useQuiz() {
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   // Tạo quiz mới
   const createQuiz = async (quizData: CreateQuizData) => {

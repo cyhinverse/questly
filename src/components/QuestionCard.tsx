@@ -15,33 +15,35 @@ type QuestionCardProps = {
   showResult?: boolean;
 };
 
-export function QuestionCard({ 
-  question, 
-  options, 
-  selectedOption, 
+export const QuestionCard = React.memo(function QuestionCard({
+  question,
+  options,
+  selectedOption,
   onSelect,
   correctAnswer,
   timeLeft,
   onAnswer,
   selectedAnswer,
-  showResult = false
+  showResult = false,
 }: QuestionCardProps) {
   const { playAnswerSelect, playCorrectAnswer, playWrongAnswer } = useSound();
   const getOptionStyle = (index: number) => {
     if (!showResult) {
       return `w-full border border-gray-300 rounded-lg px-4 py-3 text-left hover:bg-gray-100 transition cursor-pointer ${
-        selectedOption === index || selectedAnswer === index ? "bg-gray-100 border-gray-400" : ""
+        selectedOption === index || selectedAnswer === index
+          ? "bg-gray-100 border-gray-400"
+          : ""
       }`;
     }
-    
+
     if (index === correctAnswer) {
       return "w-full border-2 border-green-500 bg-green-100 rounded-lg px-4 py-3 text-left";
     }
-    
+
     if (index === selectedAnswer && index !== correctAnswer) {
       return "w-full border-2 border-red-500 bg-red-100 rounded-lg px-4 py-3 text-left";
     }
-    
+
     return "w-full border border-gray-300 rounded-lg px-4 py-3 text-left bg-gray-50 opacity-60";
   };
 
@@ -49,15 +51,15 @@ export function QuestionCard({
     if (!showResult) {
       return "font-medium text-black";
     }
-    
+
     if (index === correctAnswer) {
       return "font-medium text-green-800";
     }
-    
+
     if (index === selectedAnswer && index !== correctAnswer) {
       return "font-medium text-red-800";
     }
-    
+
     return "font-medium text-gray-500";
   };
 
@@ -86,7 +88,11 @@ export function QuestionCard({
       <div className="flex justify-between items-center">
         <div className="text-lg font-medium text-black">{question}</div>
         {timeLeft !== undefined && (
-          <div className={`text-xl font-bold ${timeLeft <= 5 ? 'text-red-500' : 'text-black'}`}>
+          <div
+            className={`text-xl font-bold ${
+              timeLeft <= 5 ? "text-red-500" : "text-black"
+            }`}
+          >
             {timeLeft}s
           </div>
         )}
@@ -111,4 +117,4 @@ export function QuestionCard({
       </div>
     </div>
   );
-}
+});

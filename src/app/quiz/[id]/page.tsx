@@ -16,17 +16,24 @@ export default function PlayQuiz() {
   const { getQuiz, fetchQuestions, questions, loading } = useQuiz();
   const { user } = useAuth();
   const { markPlayerCompleted } = useRoom();
-  
-  const [quiz, setQuiz] = useState<{ id: string; title: string; description?: string; difficulty: string } | null>(null);
+
+  const [quiz, setQuiz] = useState<{
+    id: string;
+    title: string;
+    description?: string;
+    difficulty: string;
+  } | null>(null);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
   const [selectedAnswer, setSelectedAnswer] = useState<number | null>(null);
   const [timeLeft, setTimeLeft] = useState(30);
   const [score, setScore] = useState(0);
-  const [answers, setAnswers] = useState<Array<{ questionId: string; answer: number; isCorrect: boolean }>>([]);
+  const [answers, setAnswers] = useState<
+    Array<{ questionId: string; answer: number; isCorrect: boolean }>
+  >([]);
   const [quizCompleted, setQuizCompleted] = useState(false);
-  
+
   // Check if this is a room game
-  const roomId = searchParams.get('room');
+  const roomId = searchParams.get("room");
   const isRoomGame = !!roomId;
 
   const quizId = params.id as string;
@@ -46,7 +53,7 @@ export default function PlayQuiz() {
     } else {
       // Quiz completed
       setQuizCompleted(true);
-      
+
       // Mark player as completed and update score if this is a room game
       if (isRoomGame && roomId && user) {
         try {
@@ -55,7 +62,7 @@ export default function PlayQuiz() {
           // Handle error silently
         }
       }
-      
+
       // Redirect based on game type
       setTimeout(() => {
         if (isRoomGame && roomId) {
@@ -63,11 +70,26 @@ export default function PlayQuiz() {
           router.push(`/room/leaderboard?room=${roomId}`);
         } else {
           // Redirect to solo results
-          router.push(`/quiz/${quizId}/results?score=${score}&total=${questions.length}&correct=${answers.filter(a => a.isCorrect).length}`);
+          router.push(
+            `/quiz/${quizId}/results?score=${score}&total=${
+              questions.length
+            }&correct=${answers.filter((a) => a.isCorrect).length}`
+          );
         }
       }, 2000);
     }
-  }, [currentQuestionIndex, questions.length, isRoomGame, roomId, user, markPlayerCompleted, score, router, quizId, answers]);
+  }, [
+    currentQuestionIndex,
+    questions.length,
+    isRoomGame,
+    roomId,
+    user,
+    markPlayerCompleted,
+    score,
+    router,
+    quizId,
+    answers,
+  ]);
 
   useEffect(() => {
     if (quizId) {
@@ -93,20 +115,20 @@ export default function PlayQuiz() {
 
   const handleAnswer = (answerIndex: number) => {
     if (selectedAnswer !== null || quizCompleted) return;
-    
+
     setSelectedAnswer(answerIndex);
-    
+
     const currentQuestion = questions[currentQuestionIndex];
     const isCorrect = answerIndex === currentQuestion.correct_answer;
-    
+
     // Save answer
     const newAnswer = {
       questionId: currentQuestion.id,
       answer: answerIndex,
-      isCorrect
+      isCorrect,
     };
     setAnswers([...answers, newAnswer]);
-    
+
     // Update score
     if (isCorrect) {
       setScore(score + 100);
@@ -140,10 +162,15 @@ export default function PlayQuiz() {
     return (
       <div className="min-h-screen bg-gray-50 flex items-center justify-center">
         <div className="bg-white rounded-2xl shadow-2xl p-8 text-center">
-          <h1 className="text-3xl font-bold text-black mb-4">Quiz Completed!</h1>
-          <div className="text-2xl font-bold text-black mb-2">Score: {score}</div>
+          <h1 className="text-3xl font-bold text-black mb-4">
+            Quiz Completed!
+          </h1>
+          <div className="text-2xl font-bold text-black mb-2">
+            Score: {score}
+          </div>
           <div className="text-lg text-gray-700 mb-6">
-            {answers.filter(a => a.isCorrect).length} / {questions.length} correct
+            {answers.filter((a) => a.isCorrect).length} / {questions.length}{" "}
+            correct
           </div>
           <div className="text-gray-500">Redirecting to results...</div>
         </div>
@@ -161,8 +188,12 @@ export default function PlayQuiz() {
         <div className="bg-white rounded-2xl shadow-2xl p-6 mb-6">
           <div className="flex justify-between items-center">
             <div>
-              <h1 className="text-2xl font-bold text-black">{quiz?.title || "Loading..."}</h1>
-              <p className="text-gray-700">{quiz?.description || "Test your knowledge"}</p>
+              <h1 className="text-2xl font-bold text-black">
+                {quiz?.title || "Loading..."}
+              </h1>
+              <p className="text-gray-700">
+                {quiz?.description || "Test your knowledge"}
+              </p>
             </div>
             <div className="text-right">
               <div className="text-sm text-gray-500">
@@ -171,10 +202,10 @@ export default function PlayQuiz() {
               <div className="text-2xl font-bold text-black">{timeLeft}s</div>
             </div>
           </div>
-          
+
           {/* Progress Bar */}
           <div className="mt-4 w-full bg-gray-200 rounded-full h-2">
-            <div 
+            <div
               className="bg-black h-2 rounded-full transition-all duration-300"
               style={{ width: `${progress}%` }}
             ></div>
@@ -193,15 +224,17 @@ export default function PlayQuiz() {
               selectedAnswer={selectedAnswer}
               showResult={selectedAnswer !== null}
             />
-            
+
             {selectedAnswer !== null && (
               <div className="mt-4 text-center">
-                <Button 
+                <Button
                   onClick={() => handleNextQuestion().catch(() => {})}
                   variant="primary"
                   className="px-8"
                 >
-                  {currentQuestionIndex < questions.length - 1 ? "Next Question" : "Finish Quiz"}
+                  {currentQuestionIndex < questions.length - 1
+                    ? "Next Question"
+                    : "Finish Quiz"}
                 </Button>
               </div>
             )}
@@ -209,7 +242,9 @@ export default function PlayQuiz() {
 
           {/* Score & Stats */}
           <div className="bg-white rounded-2xl shadow-2xl p-6">
-            <h2 className="text-xl font-bold mb-4 text-center text-black">Your Progress</h2>
+            <h2 className="text-xl font-bold mb-4 text-center text-black">
+              Your Progress
+            </h2>
             <div className="space-y-4">
               <div className="text-center">
                 <div className="text-3xl font-bold text-black">{score}</div>
@@ -217,7 +252,8 @@ export default function PlayQuiz() {
               </div>
               <div className="text-center">
                 <div className="text-2xl font-bold text-black">
-                  {answers.filter(a => a.isCorrect).length} / {questions.length}
+                  {answers.filter((a) => a.isCorrect).length} /{" "}
+                  {questions.length}
                 </div>
                 <div className="text-sm text-gray-500">Correct Answers</div>
               </div>
